@@ -6,10 +6,15 @@ setTimeout(function () {
     searchReco.style.display = "none";
   }
 
-  // News direkt
+  // Person's introduction fully conceived with news
   let topNews = document.querySelector(".VNzqVe .e6hL7d > div:nth-child(2)");
   if (topNews) {
     topNews.style.display = "none";
+  }
+
+  let topSocial = document.querySelector(".VNzqVe .e6hL7d > div:nth-child(5)");
+  if (topSocial) {
+    topSocial.style.display = "none";
   }
 
   // Select all div elements with role="heading"
@@ -23,9 +28,9 @@ setTimeout(function () {
     if (spanElement && spanElement.textContent === "Weitere Fragen") {
       console.log("Found the div:", div);
 
-      // Navigate 6 divs upwards
+      // Navigate 5 divs upwards
       let parentDiv = div;
-      for (let i = 0; i < 6; i++) {
+      for (let i = 0; i < 5; i++) {
         if (parentDiv.parentNode) {
           parentDiv = parentDiv.parentNode;
         } else {
