@@ -1,11 +1,12 @@
 {
   "manifest_version": 3,
-  "name": "GoogleBlocker",
-  "version": "1.0",
-  "permissions": ["storage", "activeTab", "scripting"],
+  "name": "Gooblock: Search Shield for Google Search",
+  "description": "A chromium based browser extension with the focus on blocking distractions on google search",
+  "version": "1.0.0",
+  "permissions": [],
   "content_scripts": [
     {
-      "matches": ["<all_urls>"],
+      "matches": ["*://*.google.com/*"],
       "js": ["content.js"]
     }
   ],

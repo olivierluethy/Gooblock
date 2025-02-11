@@ -1,7 +1,7 @@
 // Wait for 2 seconds before executing the code
 setTimeout(function () {
   // Suchvorschläge - nicht so optimal
-  let searchReco = document.querySelector(".aajZCb");
+  let searchReco = document.querySelector(".UUbT9");
   if (searchReco) {
     searchReco.style.display = "none";
   }
