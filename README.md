@@ -43,7 +43,8 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## Contact
 
-For any inquiries or feedback, please reach out to [your-email@example.com](mailto:muskox.beryl2671@eagereverest.com).
+For any inquiries or feedback, please reach out to [muskox.beryl2671@eagereverest.com](mailto:muskox.beryl2671@eagereverest.com).
 
 ## Resources
+
 https://www.google.com/preferences?lang=1

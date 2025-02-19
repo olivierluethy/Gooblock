@@ -1,335 +1,174 @@
-// Check if the current URL starts with "https://www.google.com/search?sa"
-// Übersicht of all the relations
-const targetURL = [
+// Constants for URL checks and selectors for DOM elements
+const TARGET_URLS = [
   "https://www.google.com/search?sa",
   "https://www.google.fr/search?sa",
   "https://www.google.de/search?sa",
   "https://www.google.ch/search?sa",
 ];
 
-// Check if the current URL starts with any of the target URLs
-const shouldRedirect = targetURL.some((url) =>
-  window.location.href.startsWith(url)
-);
+const SELECTORS = {
+  topNews: ".VNzqVe .e6hL7d > div:nth-child(2)",
+  topSocial: ".VNzqVe .e6hL7d > div:nth-child(5)",
+  xpost: ".g.eejeod",
+};
 
-if (shouldRedirect) {
-  // Redirect to a different URL
-  window.location.href = "https://google.com"; // Change this to your desired URL
+// Function to check if current URL matches any target URL
+const shouldRedirect = () =>
+  TARGET_URLS.some((url) => window.location.href.startsWith(url));
+
+// Function to hide elements based on selectors
+const hideElements = (selector) => {
+  const element = document.querySelector(selector);
+  if (element) element.style.display = "none";
+};
+
+// Function to hide parent elements of a specified depth
+const hideParent = (element, depth) => {
+  let parent = element;
+  for (let i = 0; i < depth && parent.parentNode; i++) {
+    parent = parent.parentNode;
+  }
+  if (parent) parent.style.display = "none";
+};
+
+// Function to check and hide sections based on heading text
+const checkAndHideSection = (headingText, depth) => {
+  const divs = document.querySelectorAll('div[role="heading"]');
+  for (const div of divs) {
+    const span = div.querySelector("span");
+    if (
+      span &&
+      headingText.some(
+        (text) => text.toLowerCase() === span.textContent.toLowerCase()
+      )
+    ) {
+      console.log("Found the div:", div);
+      hideParent(div, depth);
+      return true; // Break the loop by returning
+    }
+  }
+  return false;
+};
+
+// Function to find an anchor with specific text content
+function findAnchorWithText(text) {
+  // Get all anchor tags with an href attribute
+  const anchors = document.querySelectorAll("a[href]");
+
+  for (let anchor of anchors) {
+    // Check if the text content of the anchor matches the given text
+    if (anchor.textContent.trim() === text) {
+      return anchor;
+    }
+  }
+  return null; // If no match is found
 }
 
-// Wait for 2 seconds before executing the code
-setTimeout(function () {
-  setInterval(function () {
-    // Suchvorschläge - nicht so optimal
-    let searchReco = document.querySelector(".UUbT9");
-    if (searchReco) {
-      searchReco.style.display = "none";
-    }
+// Main execution function
+const executeCleanup = () => {
+  // Redirect if necessary
+  if (shouldRedirect()) {
+    window.location.href = "https://google.com";
+    return;
+  }
 
-    // Person's introduction fully conceived with news
-    let topNews = document.querySelector(".VNzqVe .e6hL7d > div:nth-child(2)");
-    if (topNews) {
-      topNews.style.display = "none";
-    }
+  // Hide specific elements
+  Object.values(SELECTORS).forEach((selector) => hideElements(selector));
 
-    let topSocial = document.querySelector(
-      ".VNzqVe .e6hL7d > div:nth-child(5)"
-    );
-    if (topSocial) {
-      topSocial.style.display = "none";
-    }
+  // Hide the specific element with ID
+  const specificElement = document.getElementById("_WzW2Z-zoBt2B9u8Pga3zgAk_3");
+  if (specificElement) specificElement.style.display = "none";
 
-    let xpost = document.querySelector(".g.eejeod");
-    if (xpost) {
-      xpost.style.display = "none";
-    }
-
-    // Select all div elements with role="heading"
-    const headingDivsWF = document.querySelectorAll('div[role="heading"]');
-
-    // Iterate through the selected divs
-    for (const div of headingDivsWF) {
-      // Check if the div contains a span element with the text "Weitere Fragen"
-      const spanElement = div.querySelector("span");
-
-      const targetPhrases = [
+  // Check and hide sections
+  const sections = [
+    {
+      texts: [
         "weitere fragen",
-        "people also search for",
+        "people also ask",
         "recherches associées",
         "autres questions",
-        "people also ask",
-      ];
+        "people also search for",
+      ],
+      depth: 5,
+    },
+    { texts: ["schlagzeilen", "top stories", "à la une"], depth: 5 },
+    { texts: ["Posts auf X"], depth: 12 },
+    { texts: ["videos", "vidéos"], depth: 6 },
+    { texts: ["Wird auch oft gesucht"], depth: 9 },
+    {
+      texts: ["What people are saying", "Latest posts from"],
+      depth: 9,
+      ariaLevel: "2",
+    },
+  ];
 
+  sections.forEach(({ texts, depth, ariaLevel }) => {
+    const selector = ariaLevel
+      ? `div[role="heading"][aria-level="${ariaLevel}"]`
+      : 'div[role="heading"]';
+    const divs = document.querySelectorAll(selector);
+    for (const div of divs) {
+      const span = div.querySelector("span");
       if (
-        spanElement &&
-        targetPhrases.includes(spanElement.textContent.toLowerCase())
+        span &&
+        texts.some(
+          (text) => text.toLowerCase() === span.textContent.toLowerCase()
+        )
       ) {
         console.log("Found the div:", div);
-
-        // Navigate 5 divs upwards
-        let parentDiv = div;
-        for (let i = 0; i < 5; i++) {
-          if (parentDiv.parentNode) {
-            parentDiv = parentDiv.parentNode;
-          } else {
-            console.log("Reached the top of the DOM, no more parents.");
-            break;
-          }
-        }
-
-        // Now that we have the parent div 6 levels up, set it to display:none
-        if (parentDiv) {
-          parentDiv.style.display = "none";
-          console.log("Set the parent div to display:none");
-        }
-
-        break; // Stop the loop once the div is found
+        hideParent(div, depth);
+        break; // Only hide one match per section
       }
     }
+  });
 
-    // Select all div elements with role="heading"
-    const headingDivsX = document.querySelectorAll('div[role="heading"]');
+  // Additional checks for "Andere suchten auch nach"
+  checkAndHideSection(
+    [
+      "andere suchten auch nach",
+      "people also search for",
+      "les internautes recherchent aussi",
+    ],
+    6
+  );
 
-    // Iterate through the selected divs
-    for (const div of headingDivsX) {
-      // Check if the div contains a span element with the text "Schlagzeilen"
-      const spanElement = div.querySelector("span");
+  // New code integration starts here
+  const textToFind = "Weitere Informationen";
+  const anchor = findAnchorWithText(textToFind);
 
+  if (anchor) {
+    let targetParent = anchor;
+
+    // Jump 3 div elements upwards
+    for (let i = 0; i < 3; i++) {
       if (
-        spanElement &&
-        (spanElement.textContent.toLowerCase() === "schlagzeilen" ||
-          spanElement.textContent.toLowerCase() === "top stories" ||
-          spanElement.textContent.toLowerCase() === "à la une")
+        targetParent.parentElement &&
+        targetParent.parentElement.tagName.toLowerCase() === "div"
       ) {
-        console.log("Found the div:", div);
-
-        // Navigate 5 divs upwards
-        let parentDiv = div;
-        for (let i = 0; i < 5; i++) {
-          if (parentDiv.parentNode) {
-            parentDiv = parentDiv.parentNode;
-          } else {
-            console.log("Reached the top of the DOM, no more parents.");
-            break;
-          }
-        }
-
-        // Now that we have the parent div 5 levels up, set it to display:none
-        if (parentDiv) {
-          parentDiv.style.display = "none";
-          console.log("Set the parent div to display:none");
-        }
-
-        break; // Stop the loop once the div is found
+        targetParent = targetParent.parentElement;
+      } else {
+        console.log("Could not find the third div parent or it is not a div");
+        break;
       }
     }
 
-    // Select all div elements with role="heading"
-    const headingDivsSchlag = document.querySelectorAll('div[role="heading"]');
+    if (targetParent) {
+      // Set the found parent to display: none
+      targetParent.style.display = "none";
+      console.log("Successfully hid the 3rd parent div of the anchor.");
 
-    // Iterate through the selected divs
-    for (const div of headingDivsSchlag) {
-      // Check if the div contains a span element with the text "Posts auf X"
-      const spanElement = div.querySelector("span");
-
-      if (spanElement && spanElement.textContent === "Posts auf X") {
-        console.log("Found the div:", div);
-
-        // Navigate 13 divs upwards
-        let parentDiv = div;
-        for (let i = 0; i < 12; i++) {
-          if (parentDiv.parentNode) {
-            parentDiv = parentDiv.parentNode;
-          } else {
-            console.log("Reached the top of the DOM, no more parents.");
-            break;
-          }
-        }
-
-        // Now that we have the parent div 13 levels up, set it to display:none
-        if (parentDiv) {
-          parentDiv.style.display = "none";
-          console.log("Set the parent div to display:none");
-        }
-
-        break; // Stop the loop once the div is found
-      }
+      // Print the entire targeted div element to the console
+      console.log("Targeted div element:", targetParent.outerHTML);
+    } else {
+      console.log("Failed to hide the 3rd parent div.");
     }
+  } else {
+    console.log(`Anchor tag with "${textToFind}" not found.`);
+  }
+  // New code integration ends here
+};
 
-    // Select all div elements with role="heading"
-    const headingDivsVideos = document.querySelectorAll('div[role="heading"]');
-
-    // Iterate through the selected divs
-    for (const div of headingDivsVideos) {
-      // Check if the div contains a span element with the text "Videos"
-      const spanElement = div.querySelector("span");
-
-      if (
-        spanElement &&
-        (spanElement.textContent.toLowerCase() === "videos" ||
-          spanElement.textContent.toLowerCase() === "vidéos")
-      ) {
-        console.log("Found the div:", div);
-
-        // Navigate 6 divs upwards
-        let parentDiv = div;
-        for (let i = 0; i < 6; i++) {
-          if (parentDiv.parentNode) {
-            parentDiv = parentDiv.parentNode;
-          } else {
-            console.log("Reached the top of the DOM, no more parents.");
-            break;
-          }
-        }
-
-        // Now that we have the parent div 6 levels up, set it to display:none
-        if (parentDiv) {
-          parentDiv.style.display = "none";
-          console.log("Set the parent div to display:none");
-        }
-
-        break; // Stop the loop once the div is found
-      }
-    }
-
-    // Select all div elements with role="heading"
-    const headingDivsAlso = document.querySelectorAll('div[role="heading"]');
-
-    // Iterate through the selected divs
-    for (const div of headingDivsAlso) {
-      // Check if the div contains a span element with the text "Wird auch oft gesucht"
-      const spanElement = div.querySelector("span");
-
-      if (spanElement && spanElement.textContent === "Wird auch oft gesucht") {
-        console.log("Found the div:", div);
-
-        // Navigate 9 divs upwards
-        let parentDiv = div;
-        for (let i = 0; i < 9; i++) {
-          if (parentDiv.parentNode) {
-            parentDiv = parentDiv.parentNode;
-          } else {
-            console.log("Reached the top of the DOM, no more parents.");
-            break;
-          }
-        }
-
-        // Now that we have the parent div 9 levels up, set it to display:none
-        if (parentDiv) {
-          parentDiv.style.display = "none";
-          console.log("Set the parent div to display:none");
-        }
-
-        break; // Stop the loop once the div is found
-      }
-    }
-
-    // Select all div elements with role="heading"
-    const headingDivsWPAS = document.querySelectorAll(
-      'div[role="heading"][aria-level="2"]'
-    );
-
-    // Iterate through the selected divs
-    for (const div of headingDivsWPAS) {
-      // Check if the div contains a span element with the text "Wird auch oft gesucht"
-      const spanElement = div.querySelector("span");
-
-      if (
-        spanElement &&
-        (spanElement.textContent === "What people are saying" ||
-          spanElement.textContent.startsWith("Latest posts from "))
-      ) {
-        console.log("Found the div:", div);
-
-        // Navigate 9 divs upwards
-        let parentDiv = div;
-        for (let i = 0; i < 9; i++) {
-          if (parentDiv.parentNode) {
-            parentDiv = parentDiv.parentNode;
-          } else {
-            console.log("Reached the top of the DOM, no more parents.");
-            break;
-          }
-        }
-
-        // Now that we have the parent div 9 levels up, set it to display:none
-        if (parentDiv) {
-          parentDiv.style.display = "none";
-          console.log("Set the parent div to display:none");
-        }
-
-        break; // Stop the loop once the div is found
-      }
-    }
-
-    // Suche nach dem div mit aria-level="2" und role="heading"
-    const headingDivFooterReco = Array.from(
-      document.querySelectorAll('div[aria-level="2"][role="heading"]')
-    ).find((div) => {
-      const spanElement = div.querySelector("span");
-      return (
-        spanElement &&
-        (spanElement.textContent === "People also search for" ||
-          spanElement.textContent === "Recherches associées")
-      );
-    });
-
-    if (headingDivFooterReco) {
-      // Gehe 9 div-Ebenen nach oben
-      let parentDiv = headingDivFooterReco;
-      for (let i = 0; i < 9; i++) {
-        if (parentDiv.parentElement) {
-          parentDiv = parentDiv.parentElement;
-        } else {
-          console.warn("Es gibt nicht genug übergeordnete Elemente.");
-          break;
-        }
-      }
-
-      // Setze das oberste div auf display: none
-      if (parentDiv) {
-        parentDiv.style.display = "none";
-      }
-    }
-
-    // Alle divs mit role="heading" und aria-level="3" durchsuchen
-    const headingDivsAlsoCheck = document.querySelectorAll(
-      'div[role="heading"][aria-level="3"]'
-    );
-
-    // Schleife durch alle gefundenen divs
-    for (const div of headingDivsAlsoCheck) {
-      // Überprüfen, ob das div ein span mit dem Text "Andere suchten auch nach" enthält
-      const spanElement = div.querySelector("span");
-
-      if (
-        spanElement &&
-        (spanElement.textContent.toLowerCase() === "andere suchten auch nach" ||
-          spanElement.textContent.toLowerCase() === "people also search for" ||
-          spanElement.textContent.toLowerCase() ===
-            "les internautes recherchent aussi")
-      ) {
-        console.log("Gefundenes div:", div);
-
-        // 6 Etagen nach oben navigieren
-        let parentDiv = div;
-        for (let i = 0; i < 6; i++) {
-          if (parentDiv.parentNode) {
-            parentDiv = parentDiv.parentNode;
-          } else {
-            console.log("Erreicht das oberste Element, keine weiteren Eltern.");
-            break;
-          }
-        }
-
-        // Setze das oberste div auf display:none
-        if (parentDiv) {
-          parentDiv.style.display = "none";
-          console.log("Das oberste div wurde auf display:none gesetzt");
-        }
-
-        break; // Schleife abbrechen, nachdem das div gefunden wurde
-      }
-    }
-  }, 500);
-}, 500); // Delay of 2000 milliseconds (2 seconds)
+// Wait for 500ms before starting the interval which checks every 500ms
+setTimeout(() => {
+  setInterval(executeCleanup, 500);
+}, 500);
