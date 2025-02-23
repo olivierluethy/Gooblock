@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "Gooblock: Search Shield for Google Search",
   "description": "A chromium based browser extension with the focus on blocking distractions on google search",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "permissions": [],
   "icons": {
     "16": "icon/icon16.png",
