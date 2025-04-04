@@ -8,7 +8,7 @@ Gooblock is a Chrome extension designed to enhance your focus while using Google
 
 In today's fast-paced digital world, it's easy to lose focus while searching for information online. Google Search, while powerful, can often lead you down rabbit holes of distractions. Gooblock aims to mitigate this by providing a distraction-free search experience.
 
-When you use Google Search, your original focus on a particular search can quickly be disrupted by features such as ads, suggested searches, and other distractions. Gooblock helps you maintain your focus on the task at hand, allowing you to find the information you need without unnecessary interruptions.
+When you use Google Search, your original focus on a particular search can quickly be disrupted by features such as ads, suggested searches, and other distractions. You may only have the intention to search for a specific question but then you get recommendations for people, different topics and that how you'll lose quickly your focus or will quickly lose yourself about what you wanted to search right at the beginning. Gooblock helps you maintain your focus on the task at hand, allowing you to find the information you need without unnecessary interruptions.
 
 ## Features
 
@@ -46,5 +46,5 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 For any inquiries or feedback, please reach out to [muskox.beryl2671@eagereverest.com](mailto:muskox.beryl2671@eagereverest.com).
 
 ## Resources
-
+In order for me to test if the extension was also compatible with different languages, as not everyone is working with the english default language I used this url for regularly switching my browsers langauge to check whether or not it was compatible and if there where things that had to be addopted in order to work.
 https://www.google.com/preferences?lang=1
