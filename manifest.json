@@ -11,10 +11,14 @@
   },
   "content_scripts": [
     {
-      "matches": [
-        "*://*.google.com/*"
-      ],
-      "js": ["all.js", "news.js", "main.js"]
+      "matches": ["*://*.google.com/*"],
+      "js": [
+        "disclosed-profile.js",
+        "non-disclosed-profile.js",
+        "all.js",
+        "news.js",
+        "main.js"
+      ]
     }
   ]
 }

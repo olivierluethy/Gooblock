@@ -1,5 +1,7 @@
 # Gooblock: Search Shield for Google Search
 
+<img src="Gooblock.png" width="25%">
+
 ## Overview
 
 Gooblock is a Chrome extension designed to enhance your focus while using Google's search engine by blocking distracting features. It helps you stay on track when searching for specific information, preventing you from getting sidetracked by Google's various features and suggestions.
@@ -46,5 +48,12 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 For any inquiries or feedback, please reach out to [muskox.beryl2671@eagereverest.com](mailto:muskox.beryl2671@eagereverest.com).
 
 ## Resources
-In order for me to test if the extension was also compatible with different languages, as not everyone is working with the english default language I used this url for regularly switching my browsers langauge to check whether or not it was compatible and if there where things that had to be addopted in order to work.
-https://www.google.com/preferences?lang=1
+
+To test if the extension was compatible with different languages, as not everyone works with the default English language, I used this url to regularly change my browser language to see if it was compatible and if there were things I needed to add to make it work.
+[Google Language Change](https://www.google.com/preferences?lang=1)
+
+To make the image in 16, 48 and 128 pixels for logo
+[Image Resizer](https://imageresizer.com/)
+
+To sharpen the image
+[Picsart](https://picsart.com/ai-image-enhancer/sharpen-image/)

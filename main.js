@@ -1,7 +1,8 @@
 const intervalId = setInterval(() => {
   const listDiv = document.querySelector("div[role='list']");
-  let navigation = document.querySelector("div[role='navigation']");
+  let navigation = document.querySelector("[role='navigation']");
 
+  // Handle listDiv
   if (listDiv) {
     console.log("Going to listDiv");
     Array.from(listDiv.children).forEach((child) => {
@@ -14,25 +15,90 @@ const intervalId = setInterval(() => {
         }
       }
     });
-  } else if (navigation) {
+  }
+  // Handle navigation
+  else if (navigation) {
     console.log("Going to navigation");
-    navigation = navigation.querySelector(".nfdoRb");
 
-    if (navigation) {
-      const anchors = Array.from(navigation.children).filter(
-        (child) => child.tagName.toLowerCase() === "a"
-      );
+    // For NON Disclosed Navigation
+    let disclosedNavigation = navigation.querySelector(
+      "div[jscontroller][data-hveid]"
+    );
 
-      const firstAnchorHasHref = anchors[0]?.hasAttribute("href");
-      const secondAnchorHasHref = anchors[1]?.hasAttribute("href");
+    // For disclosed navigation
+    if (disclosedNavigation) {
+      const fourthChild = disclosedNavigation.children[4];
 
-      if (firstAnchorHasHref && !secondAnchorHasHref) {
-        console.log("Du befindest dich im 'News' Bereich.");
-        news();
+      if (fourthChild && fourthChild.tagName.toLowerCase() === "a") {
+        const hasHref = fourthChild.hasAttribute("href");
+
+        if (!hasHref) {
+          console.log("Your inside of NEWS");
+
+          let newsObject = document.getElementById("search");
+          if (newsObject) {
+            newsObject = newsObject.querySelector("#rso");
+            ad = newsObject.querySelector("[data-hveid][data-ved]");
+
+            // Überprüfen, ob das `ad`-Element existiert
+            if (ad) {
+              // Iteriere durch alle children-Elemente des `ad`-Elements
+              Array.from(ad.children).forEach((child) => {
+                // Überprüfen, ob das aktuelle Kind ein <g-section-with-header> ist
+                if (child.tagName.toLowerCase() === "g-section-with-header") {
+                  child.remove(); // Entferne das <g-section-with-header>-Element
+                }
+                // Überprüfen, ob es ein normales div mit data-hveid Attribut ist
+                else if (
+                  child.tagName.toLowerCase() === "div" &&
+                  child.hasAttribute("data-hveid")
+                ) {
+                  // Suche innerhalb des div nach einem Element mit role="heading" und einem aria-level Attribut
+                  const heading = child.querySelector(
+                    '[role="heading"][aria-level]'
+                  );
+                  if (heading) {
+                    heading.remove(); // Entferne das <role="heading">-Element
+                  }
+                  // Suche nach einem <span>-Element mit exakt dem Text "LIVE"
+                  const liveSpanElement = Array.from(
+                    document.getElementsByTagName("span") // Nur <span>-Elemente
+                  ).find((el) => el.textContent.trim() === "LIVE");
+
+                  if (liveSpanElement) {
+                    let overclass = liveSpanElement.parentElement;
+                    if (overclass) {
+                      overclass.remove();
+                    }
+                  } else {
+                    // console.log("Kein Span-Element mit 'LIVE' gefunden.");
+                  }
+                  // Suche nach den Thumbnails von den Newsportalen und entferne sie
+                  const thumbnails = Array.from(
+                    document.getElementsByTagName("img")
+                  );
+
+                  thumbnails.forEach((img) => {
+                    if (
+                      img &&
+                      img.parentElement &&
+                      img.parentElement.tagName.toLowerCase() !== "g-img" &&
+                      img.parentElement.parentElement &&
+                      img.parentElement.parentElement.parentElement
+                    ) {
+                      img.parentElement.parentElement.parentElement.style.display =
+                        "none";
+                    }
+                  });
+                }
+              });
+            }
+          }
+        }
       }
     } else {
-      //   console.log("Nope no navigation");
-      /* Remove google search distraction at only search page */
+      // Handle no disclosed navigation scenario
+
       // Method 1: Using querySelector
       const element = document.querySelector(
         "form div[jscontroller][jsname].UUbT9.EyBRub"
@@ -41,7 +107,7 @@ const intervalId = setInterval(() => {
         element.removeChild(element.children[4]);
       }
 
-      // Method 2: More verbose but explicit
+      // Method 2: More explicit form handling
       const forms = document.getElementsByTagName("form");
       for (let form of forms) {
         const divs = form.getElementsByTagName("div");
