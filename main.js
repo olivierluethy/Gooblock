@@ -10,13 +10,17 @@ const intervalId = setInterval(() => {
       const anchor = firstChild.querySelector("a");
 
       if (anchor && !anchor.hasAttribute("href")) {
-        console.log("Du befindest dich im 'Alle' Bereich.");
+        // console.log("Du befindest dich im 'Alle' Bereich.");
         all();
       }
     }
   } else {
-    /* Innerhalb von befindet sich keine role='list' aber dafür eine navigation aber oben wird geschaut ob sich innerhalb von role='navigation' sich diese list befindet um den Unterschied dabei auffallend bewirken zu lassen */
-    console.log("Your within the news");
+    /* 
+    Innerhalb dieses Elements befindet sich kein Element mit role='list', 
+    sondern eine Navigation, aber oben wird geprüft, ob sich innerhalb von role='navigation' diese Liste befindet, 
+    um zwischen Hauptseite und News zu unterscheiden. 
+    */
+    // console.log("Your within the news");
     news();
   }
 }, 1000);

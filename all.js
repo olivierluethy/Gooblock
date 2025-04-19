@@ -14,13 +14,13 @@ function all() {
       parent.tagName.toLowerCase() === "a" &&
       parent.getAttribute("role") === "link"
     ) {
-      console.log('Parent is an <a> element with role="link"');
+      // console.log('Parent is an <a> element with role="link"');
       nonDisclosedProfile();
     } else {
-      console.log('Parent is not an <a> element with role="link"');
+      // console.log('Parent is not an <a> element with role="link"');
       disclosedProfile();
     }
   } else {
-    console.log("Element or parent not found");
+    // console.log("Element or parent not found");
   }
 }

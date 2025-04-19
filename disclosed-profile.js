@@ -1,4 +1,19 @@
 function disclosedProfile() {
+  /* Bilderpresentation dieser Person nach dessen Suche direkt unter ihrem Namen */
+  const container = document.querySelector("div[role='complementary']");
+
+  if (container?.children[0]?.children[0]) {
+    const imagePresentation = container.children[0].children[0];
+    const elementsToHide = [1, 4]; // Indizes der Elemente, die ausgeblendet werden sollen
+
+    elementsToHide.forEach((index) => {
+      const child = imagePresentation.children[index];
+      if (child) {
+        child.style.display = "none";
+      }
+    });
+  }
+
   /* Remove all distrative feature inside of main page after search has been made */
   let cast = document.getElementById("kp-wp-tab-overview");
   if (cast) {

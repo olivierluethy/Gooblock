@@ -1,6 +1,6 @@
 # Gooblock: Search Shield for Google Search
 
-<img src="Gooblock.png" width="25%">
+<img src="icon/Gooblock.png" width="25%">
 
 ## Overview
 
