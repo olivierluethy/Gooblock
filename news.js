@@ -26,6 +26,14 @@ function news() {
           if (heading) {
             heading.remove(); // Entferne das <role="heading">-Element
           }
+          // Suche nach dem Medien Logo
+          let logo = child.querySelector("g-img");
+          if (logo) {
+            logo = logo.querySelector("img");
+            if (logo) {
+              logo.remove();
+            }
+          }
           // Suche nach einem <span>-Element mit exakt dem Text "LIVE"
           const liveSpanElement = Array.from(
             document.getElementsByTagName("span") // Nur <span>-Elemente

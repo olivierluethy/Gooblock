@@ -1,30 +1,6 @@
 function all() {
-  /* Remove google search distraction at only search page */
-  // Method 1: Using querySelector
-  const element = document.querySelector(
-    "form div[jscontroller][jsname].UUbT9.EyBRub"
-  );
-  if (element && element.children[4]) {
-    element.removeChild(element.children[4]);
-  }
-
-  // Method 2: More verbose but explicit
-  const forms = document.getElementsByTagName("form");
-  for (let form of forms) {
-    const divs = form.getElementsByTagName("div");
-    for (let div of divs) {
-      if (
-        div.hasAttribute("jscontroller") &&
-        div.hasAttribute("jsname") &&
-        div.classList.contains("UUbT9") &&
-        div.classList.contains("EyBRub")
-      ) {
-        div.remove();
-        break;
-      }
-    }
-  }
   /* To check if disclosed search or not */
+  /* Indem geschaut wird ob sich bei der Überschrift dieser Person ein Link zu dessen Hauptseite sich befindet */
   let discloseProof = document.querySelector(
     "[aria-level='2'][data-attrid='title'][role='heading']"
   );

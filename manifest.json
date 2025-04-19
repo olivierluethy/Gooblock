@@ -11,10 +11,11 @@
   },
   "content_scripts": [
     {
-      "matches": ["*://*.google.com/*"],
+      "matches": ["*://*.google.com/*", "*://*.google.ch/*"],
       "js": [
         "disclosed-profile.js",
         "non-disclosed-profile.js",
+        "searchFieldClearence.js",
         "all.js",
         "news.js",
         "main.js"
