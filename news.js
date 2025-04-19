@@ -34,6 +34,11 @@ function news() {
               logo.remove();
             }
           }
+          // Vor wie vielen Minuten, Stunden oder Tagen der Artikel geschaffen wurde + Der Name des Mediums
+          let time = child.querySelector("span");
+          if (time) {
+            time.remove();
+          }
           // Suche nach einem <span>-Element mit exakt dem Text "LIVE"
           const liveSpanElement = Array.from(
             document.getElementsByTagName("span") // Nur <span>-Elemente
@@ -62,6 +67,7 @@ function news() {
                 "none";
             }
           });
+          child.style.marginTop = "-1.5rem";
         }
       });
     }
