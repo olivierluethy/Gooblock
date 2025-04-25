@@ -4,14 +4,30 @@ function disclosedProfile() {
 
   if (container?.children[0]?.children[0]) {
     const imagePresentation = container.children[0].children[0];
-    const elementsToHide = [1, 4]; // Indizes der Elemente, die ausgeblendet werden sollen
 
-    elementsToHide.forEach((index) => {
-      const child = imagePresentation.children[index];
-      if (child) {
+    for (let i = imagePresentation.children.length - 1; i >= 0; i--) {
+      const child = imagePresentation.children[i];
+      const links = child.querySelectorAll("a");
+
+      // Ausgabe aller Links innerhalb dieses child-Elements
+      console.log(`Element #${i} enthält ${links.length} Link(s):`);
+      links.forEach((link, index) => {
+        console.log(`  Link ${index + 1}: ${link.getAttribute("href")}`);
+      });
+
+      // Suche nach einem gültigen Link, der mit "/search?" beginnt
+      const validLinkFound = Array.from(links).some((link) =>
+        link.getAttribute("href")?.startsWith("/search?")
+      );
+
+      // Wenn ein Link vorhanden ist, aber keiner mit "/search?" beginnt → verstecken
+      if (links.length > 0 && !validLinkFound) {
         child.style.display = "none";
+        console.log(`  ➤ Element #${i} wurde versteckt.`);
+      } else {
+        console.log(`  ➤ Element #${i} bleibt sichtbar.`);
       }
-    });
+    }
   }
 
   /* Remove all distrative feature inside of main page after search has been made */
@@ -55,10 +71,6 @@ function disclosedProfile() {
       if (headingDiv) {
         // Entferne das Element, wenn das headingDiv existiert, unabhängig davon
         // ob die URLs gleich oder unterschiedlich sind
-        child.remove();
-      } else if (links.length > 1 && !allSameBase) {
-        // Entferne das Element, wenn mehrere unterschiedliche URLs vorhanden sind
-        // und kein headingDiv existiert
         child.remove();
       }
       // Wenn alle URLs den gleichen Basis-Pfad haben und kein headingDiv existiert,
