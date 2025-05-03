@@ -7,21 +7,32 @@ function disclosedProfile() {
 
     for (let i = imagePresentation.children.length - 1; i >= 0; i--) {
       const child = imagePresentation.children[i];
-      const links = child.querySelectorAll("a");
+      const links = Array.from(child.querySelectorAll("a"));
 
-      // Ausgabe aller Links innerhalb dieses child-Elements
-      console.log(`Element #${i} enthält ${links.length} Link(s):`);
-      links.forEach((link, index) => {
-        console.log(`  Link ${index + 1}: ${link.getAttribute("href")}`);
+      // Nur Links mit gültigem href (nicht null oder leer)
+      const linksWithHref = links.filter((link) => {
+        const href = link.getAttribute("href");
+        return href !== null && href.trim() !== "";
       });
 
-      // Suche nach einem gültigen Link, der mit "/search?" beginnt
-      const validLinkFound = Array.from(links).some((link) =>
-        link.getAttribute("href")?.startsWith("/search?")
+      console.log(
+        `Element #${i} enthält ${links.length} Link(s), davon ${linksWithHref.length} mit gültigem href:`
       );
 
-      // Wenn ein Link vorhanden ist, aber keiner mit "/search?" beginnt → verstecken
-      if (links.length > 0 && !validLinkFound) {
+      links.forEach((link, index) => {
+        const href = link.getAttribute("href");
+        console.log(
+          `  Link ${index + 1}: ${href !== null ? href : "Kein href vorhanden"}`
+        );
+      });
+
+      // Suche nach gültigem Link, der mit "/search?" beginnt
+      const validLinkFound = linksWithHref.some((link) =>
+        link.getAttribute("href").startsWith("/search?")
+      );
+
+      // Nur verstecken, wenn es mindestens einen echten Link gibt, aber keiner gültig ist
+      if (linksWithHref.length > 0 && !validLinkFound) {
         child.style.display = "none";
         console.log(`  ➤ Element #${i} wurde versteckt.`);
       } else {
